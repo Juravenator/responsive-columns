@@ -1,0 +1,37 @@
+:host {
+  display: block;
+  height: 100%;
+}
+[horizontal] {
+  display: flex;
+  flex-direction: row;
+}
+[vertical] {
+  display: flex;
+  flex-direction: column;
+}
+[flex] {
+  flex: 1;
+}
+app-toolbar {
+  background-color: var(--toolbar-color, #00796B);
+  paper-icon-button {
+    color: white;
+  }
+  &[hide] {
+    display: none !important;
+  }
+}
+neon-animated-pages {
+  height: 100%;
+}
+:host([responsive-mode="big"]) {
+  #animatedPages {
+    ::content {
+      & > * {
+        position: static !important;
+        display: block !important;
+      }
+    }
+  }
+}
