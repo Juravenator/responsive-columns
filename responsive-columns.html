@@ -1,0 +1,233 @@
+<!--
+@license
+Copyright (c) 2016 Glenn Dirkx. All rights reserved.
+This code may only be used under the MIT style license found at https://github.com/Juravenator/responsive-columns/blob/master/LICENSE
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+
+<link rel="import" href="../neon-animation/neon-animated-pages.html">
+<link rel="import" href="../neon-animation/neon-animatable.html">
+<link rel="import" href="../neon-animation/animations/slide-from-right-animation.html">
+<link rel="import" href="../neon-animation/animations/slide-from-left-animation.html">
+<link rel="import" href="../neon-animation/animations/slide-right-animation.html">
+<link rel="import" href="../neon-animation/animations/slide-left-animation.html">
+
+<link rel="import" href="../app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+
+<!--
+`responsive-columns` displays its content in a column layout, or a series of
+animated pages, depending on the available size.
+
+Example:
+
+    <responsive-columns>
+      <div>
+        first column
+      </div>
+      <div>
+        second column
+      </div>
+      <div>
+        third column
+      </div>
+    </responsive-columns>
+    <responsive-columns responsive-width="400"
+                        column-mode="vertical"
+                        no-toolbar></responsive-columns>
+
+### Styling
+The following custom properties and mixins are available for styling:
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--toolbar-color` | Color of the toolbar in small mode | `#00796B` (paper-teal-700)
+
+@demo demo/index.html
+-->
+<dom-module id="responsive-columns">
+  <template>
+    <style>
+:host {
+  display: block;
+  height: 100%;
+}
+
+[horizontal] {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: row;
+      flex-direction: row;
+}
+
+[vertical] {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+      flex-direction: column;
+}
+
+[flex] {
+  -ms-flex: 1;
+      flex: 1;
+}
+
+app-toolbar {
+  background-color: var(--toolbar-color, #00796B);
+}
+
+app-toolbar paper-icon-button {
+  color: white;
+}
+
+app-toolbar[hide] {
+  display: none !important;
+}
+
+neon-animated-pages {
+  height: 100%;
+}
+
+:host([responsive-mode="big"]) #animatedPages ::content > * {
+  position: static !important;
+  display: block !important;
+}
+
+</style>
+
+    <app-toolbar horizontal layout hide$="[[_toolbarMustHide(responsiveMode, noToolbar)]]">
+      <template is="dom-if" if="{{!_firstIsSelected(selectedIndex)}}" restamp="true">
+        <paper-icon-button icon="arrow-back" on-click="selectPrevious"></paper-icon-button>
+      </template>
+      <span flex></span>
+      <template is="dom-if" if="{{!_lastIsSelected(selectedIndex, _items)}}" restamp="true">
+        <paper-icon-button icon="arrow-forward" on-click="selectNext"></paper-icon-button>
+      </template>
+    </app-toolbar>
+
+    <neon-animated-pages id="animatedPages"
+                         selected="{{selectedIndex}}"
+                         entry-animation="[[_entryAnimation]]"
+                         exit-animation="[[_exitAnimation]]"
+                         items="{{_items}}"
+                         vertical$="[[_columnIsVertical(columnMode)]]"
+                         horizontal$="[[_columnIsHorizontal(columnMode)]]">
+      <content></content>
+    </neon-animated-pages>
+
+  </template>
+  <script>
+"use strict";
+
+Polymer({
+    is: "responsive-columns",
+    properties: {
+        /**
+     * The selected index when in small mode
+     */
+        selectedIndex: {
+            type: Number,
+            value: 0,
+            notify: !0,
+            observer: "_selectedIndexChanged"
+        },
+        /**
+     * The items in the neon-animated-pages.
+     * Used to show or hide the 'next' button in small mode.
+     */
+        _items: {
+            type: Array
+        },
+        /**
+     * animation used in 'small' mode. Changes programaticaly
+     */
+        _entryAnimation: {
+            type: String,
+            readOnly: !0
+        },
+        /**
+     * animation used in 'small' mode. Changes programaticaly
+     */
+        _exitAnimation: {
+            type: String,
+            readOnly: !0
+        },
+        /**
+     * Number, interpreted in px, that represents the breakpoint between small
+     * and big mode.
+     */
+        responsiveWidth: {
+            type: Number,
+            value: 640
+        },
+        /**
+     * Current mode, 'small' or 'big'.
+     */
+        responsiveMode: {
+            type: String,
+            readOnly: !0,
+            reflectToAttribute: !0
+        },
+        /**
+     * Force-hide the toolbar in small mode.
+     */
+        noToolbar: {
+            type: Boolean,
+            value: !1
+        },
+        /**
+     * Mode to use for the columns in big mode, 'horizontal' or 'vertical'.
+     */
+        columnMode: {
+            type: String,
+            value: "horizontal"
+        }
+    },
+    behaviors: [ Polymer.IronResizableBehavior ],
+    listeners: {
+        "iron-resize": "_sizeChanged"
+    },
+    /**
+   * Responds to iron-resize event. Calculates responsiveMode.
+   */
+    _sizeChanged: function(a) {
+        var b = Math.floor(this.offsetWidth);
+        b < this.responsiveWidth ? this._setResponsiveMode("small") : this._setResponsiveMode("big");
+    },
+    /**
+   * Returns true if responsiveMode is 'small'
+   */
+    _isSmall: function(a) {
+        return "small" == a;
+    },
+    _toolbarMustHide: function(a, b) {
+        return b || !this._isSmall(a);
+    },
+    _firstIsSelected: function(a) {
+        return 0 == a;
+    },
+    _lastIsSelected: function(a, b) {
+        return this.selectedIndex == b.length - 1;
+    },
+    _selectedIndexChanged: function(a, b) {
+        a > b ? (this._set_entryAnimation("slide-from-right-animation"), this._set_exitAnimation("slide-left-animation")) : (this._set_entryAnimation("slide-from-left-animation"), 
+        this._set_exitAnimation("slide-right-animation"));
+    },
+    selectPrevious: function() {
+        this.selectedIndex > 0 && this.$.animatedPages.selectPrevious();
+    },
+    selectNext: function() {
+        this.selectedIndex < this.$.animatedPages.items.length && this.$.animatedPages.selectNext();
+    },
+    _columnIsVertical: function(a) {
+        return "vertical" == a;
+    },
+    _columnIsHorizontal: function(a) {
+        return !this._columnIsVertical(a);
+    }
+});
+</script>
+</dom-module>
