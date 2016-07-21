@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+      <script src="/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+      <script src="/bower_components/web-component-tester/browser.js"></script>
+
+      <link rel="import" href="../responsive-columns.html">
+  </head>
+  <body>
+
+      <test-fixture id="responsive-columns-fixture">
+          <template>
+              <responsive-columns>
+                  <h2>responsive-columns</h2>
+              </responsive-columns>
+          </template>
+      </test-fixture>
+
+      <script>
+          suite('<responsive-columns>', function() {
+              var element;
+              setup(function() {
+                  element = fixture('responsive-columns-fixture');
+              });
+
+              test('small mode works', function() {
+                element.style.width = "400px";
+                element._sizeChanged();
+                assert(element.responsiveMode, "small");
+              });
+
+              test('big mode works', function() {
+                element.style.width = "800px";
+                element._sizeChanged();
+                assert(element.responsiveMode, "small");
+              });
+          });
+      </script>
+
+  </body>
+</html>

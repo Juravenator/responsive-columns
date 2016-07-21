@@ -1,0 +1,16 @@
+{
+  "verbose": false,
+  "_plugins": {
+    "local": {
+      "browsers": ["chrome", "firefox"]
+    }
+  },
+  "_webserver": {
+    "pathMappings": [
+      {"/bower_components": "../../bower_components"},
+      {"/bower_components": "htdocs/bower_components"},
+      {"/elements": "htdocs/elements"},
+      {"/elements": "../../elements"}
+    ]
+  }
+}
