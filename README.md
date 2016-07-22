@@ -12,6 +12,9 @@ Apart from the toolbar used for the animated pages, this element makes no
 assumptions about the used design pattern (i.e. the styling of the columns is up
 to you).
 
+Note that this element does not use CSS media queries to determine the available
+size. It measures the width that is really available to your element.
+
 ### Install
 
 ```bash
