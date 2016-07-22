@@ -169,9 +169,6 @@ module.exports = function(grunt) {
         },
         src: ['_build']
       },
-      forGit: {
-        src: ['_build', 'bower_components', 'node_modules']
-      },
       all: {
         options: {
           'no-write': false
