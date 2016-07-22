@@ -1,0 +1,26 @@
+{
+  "name": "responsive-columns",
+  "homepage": "https://github.com/Juravenator/responsive-columns",
+  "authors": [
+    "Glenn Dirkx <glenn.dirkx@agilians.com>"
+  ],
+  "description": "A Polymer element that displays its content in a column layout, or a series of animated pages, depending on the available size.",
+  "main": "responsive-columns.scss",
+  "license": "https://github.com/Juravenator/responsive-columns/blob/master/LICENSE",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "polymer/polymer#^1.6.0",
+    "neon-animation": "polymerelements/neon-animation#^1.2.4",
+    "app-layout": "polymerelements/app-layout#^0.10.1",
+    "iron-icons": "polymerelements/iron-icons#^1.1.3",
+    "paper-icon-button": "polymerelements/paper-icon-button#^1.1.2",
+    "iron-resizable-behavior": "polymerelements/iron-resizable-behavior#^1.0.4",
+    "iron-component-page": "polymerelements/iron-component-page#^1.1.7"
+  }
+}
