@@ -14,6 +14,10 @@
     "test",
     "tests"
   ],
+  "keywords": [
+    "web-components",
+    "polymer"
+  ],
   "dependencies": {
     "polymer": "polymer/polymer#^1.6.0",
     "neon-animation": "polymerelements/neon-animation#^1.2.4",
