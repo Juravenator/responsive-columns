@@ -14,5 +14,13 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "responsive-columns": "^0.1.0",
+    "iron-component-page": "^1.1.7",
+    "webcomponentsjs": "^0.7.22"
+  },
+  "devDependencies": {
+    "web-component-tester": "^4.3.1"
+  }
 }
