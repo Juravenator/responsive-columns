@@ -28,7 +28,7 @@
   "_resolution": {
     "type": "version",
     "tag": "0.1.0",
-    "commit": "954e8545853f1dc1411ab3b05be4c06083fb16db"
+    "commit": "d5d9e368db94c43d9747e215e4b71d67d404bd68"
   },
   "_source": "https://github.com/Juravenator/responsive-columns.git",
   "_target": "^0.1.0",
