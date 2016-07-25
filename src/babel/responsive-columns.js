@@ -125,7 +125,7 @@ Polymer({
   },
 
   selectNext: function() {
-    if (this.selectedIndex < this.$.animatedPages.items.length) {
+    if (this.selectedIndex < this.$.animatedPages.items.length - 1) {
       this.$.animatedPages.selectNext();
     }
   },
