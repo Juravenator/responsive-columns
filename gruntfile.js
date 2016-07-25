@@ -137,7 +137,7 @@ module.exports = function(grunt) {
       options: {
         preserveComments: /(?:^\*|@(?:license|preserve|cc_on))/,
         mangleProperties: false,
-        mangle: true,
+        mangle: false,
         beautify: true,
         srewIE8: true,
         sourceMap: false
