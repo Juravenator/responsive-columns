@@ -22,7 +22,7 @@ This code may only be used under the MIT style license found at https://github.c
 `responsive-columns` displays its content in a column layout, or a series of
 animated pages, depending on the available size.
 
-Example:
+Simple example:
 
     <responsive-columns>
       <div>
@@ -35,9 +35,30 @@ Example:
         third column
       </div>
     </responsive-columns>
-    <responsive-columns responsive-width="400"
-                        column-mode="vertical"
-                        no-toolbar></responsive-columns>
+
+Custom toolbar example:
+
+    <responsive-columns no-toolbar
+                        selected-index="{{selectedIndex}}"
+                        min-selected="{{minSelected}}"
+                        max-selected="{{maxSelected}}">
+      <app-toolbar toolbar>
+        <paper-icon-button icon="arrow-back" previous-button disabled="[[minSelected]]"></paper-icon-button>
+        <span>column #[[selectedIndex]]</span>
+        <paper-icon-button icon="arrow-forward" next-button disabled="[[maxSelected]]"></paper-icon-button>
+      </app-toolbar>
+      <div>
+        <h1>first column</h1>
+        <img src="dino.jpg" alt=""/>
+      </div>
+      <div>
+        <h1>second column</h1>
+        <p>This is the second column</p>
+      </div>
+      <div>
+        <h1>third column</h1>
+      </div>
+    </responsive-columns>
 
 ### Styling
 The following custom properties and mixins are available for styling:
