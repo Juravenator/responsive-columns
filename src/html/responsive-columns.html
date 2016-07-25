@@ -52,14 +52,12 @@ Custom property | Description | Default
   <template>
     <link rel="stylesheet" type="text/css" href="../css/responsive-columns.css?__inline=true">
 
+    <content select="[toolbar]"></content>
+
     <app-toolbar horizontal layout hide$="[[_toolbarMustHide(responsiveMode, noToolbar)]]">
-      <template is="dom-if" if="{{!_firstIsSelected(selectedIndex)}}" restamp="true">
-        <paper-icon-button icon="arrow-back" on-click="selectPrevious"></paper-icon-button>
-      </template>
+      <paper-icon-button disabled="[[minSelected]]" icon="arrow-back" on-click="selectPrevious"></paper-icon-button>
       <span flex></span>
-      <template is="dom-if" if="{{!_lastIsSelected(selectedIndex, _items)}}" restamp="true">
-        <paper-icon-button icon="arrow-forward" on-click="selectNext"></paper-icon-button>
-      </template>
+      <paper-icon-button disabled="[[maxSelected]]" icon="arrow-forward" on-click="selectNext"></paper-icon-button>
     </app-toolbar>
 
     <neon-animated-pages id="animatedPages"
@@ -69,7 +67,7 @@ Custom property | Description | Default
                          items="{{_items}}"
                          vertical$="[[_columnIsVertical(columnMode)]]"
                          horizontal$="[[_columnIsHorizontal(columnMode)]]">
-      <content></content>
+      <content select=":not([toolbar])"></content>
     </neon-animated-pages>
 
   </template>
