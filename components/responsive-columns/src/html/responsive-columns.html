@@ -22,7 +22,7 @@ This code may only be used under the MIT style license found at https://github.c
 `responsive-columns` displays its content in a column layout, or a series of
 animated pages, depending on the available size.
 
-Example:
+Simple example:
 
     <responsive-columns>
       <div>
@@ -35,9 +35,30 @@ Example:
         third column
       </div>
     </responsive-columns>
-    <responsive-columns responsive-width="400"
-                        column-mode="vertical"
-                        no-toolbar></responsive-columns>
+
+Custom toolbar example:
+
+    <responsive-columns no-toolbar
+                        selected-index="{{selectedIndex}}"
+                        min-selected="{{minSelected}}"
+                        max-selected="{{maxSelected}}">
+      <app-toolbar toolbar>
+        <paper-icon-button icon="arrow-back" previous-button disabled="[[minSelected]]"></paper-icon-button>
+        <span>column #[[selectedIndex]]</span>
+        <paper-icon-button icon="arrow-forward" next-button disabled="[[maxSelected]]"></paper-icon-button>
+      </app-toolbar>
+      <div>
+        <h1>first column</h1>
+        <img src="dino.jpg" alt=""/>
+      </div>
+      <div>
+        <h1>second column</h1>
+        <p>This is the second column</p>
+      </div>
+      <div>
+        <h1>third column</h1>
+      </div>
+    </responsive-columns>
 
 ### Styling
 The following custom properties and mixins are available for styling:
@@ -52,14 +73,12 @@ Custom property | Description | Default
   <template>
     <link rel="stylesheet" type="text/css" href="../css/responsive-columns.css?__inline=true">
 
+    <content select="[toolbar]"></content>
+
     <app-toolbar horizontal layout hide$="[[_toolbarMustHide(responsiveMode, noToolbar)]]">
-      <template is="dom-if" if="{{!_firstIsSelected(selectedIndex)}}" restamp="true">
-        <paper-icon-button icon="arrow-back" on-click="selectPrevious"></paper-icon-button>
-      </template>
+      <paper-icon-button disabled="[[minSelected]]" icon="arrow-back" on-click="selectPrevious"></paper-icon-button>
       <span flex></span>
-      <template is="dom-if" if="{{!_lastIsSelected(selectedIndex, _items)}}" restamp="true">
-        <paper-icon-button icon="arrow-forward" on-click="selectNext"></paper-icon-button>
-      </template>
+      <paper-icon-button disabled="[[maxSelected]]" icon="arrow-forward" on-click="selectNext"></paper-icon-button>
     </app-toolbar>
 
     <neon-animated-pages id="animatedPages"
@@ -69,7 +88,7 @@ Custom property | Description | Default
                          items="{{_items}}"
                          vertical$="[[_columnIsVertical(columnMode)]]"
                          horizontal$="[[_columnIsHorizontal(columnMode)]]">
-      <content></content>
+      <content select=":not([toolbar])"></content>
     </neon-animated-pages>
 
   </template>

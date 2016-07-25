@@ -11,8 +11,13 @@
     "**/.*",
     "node_modules",
     "bower_components",
+    "components",
     "test",
     "tests"
+  ],
+  "keywords": [
+    "web-components",
+    "polymer"
   ],
   "dependencies": {
     "polymer": "polymer/polymer#^1.6.0",

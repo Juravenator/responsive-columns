@@ -34,4 +34,19 @@ neon-animated-pages {
       }
     }
   }
+  ::content {
+    [toolbar] {
+      display: none;
+    }
+  }
+}
+:host([max-selected][min-selected]) {
+  [next-button] {
+    display: none;
+  }
+  ::content {
+    [next-button] {
+      pointer-events: none;
+    }
+  }
 }

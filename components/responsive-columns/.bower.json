@@ -11,8 +11,13 @@
     "**/.*",
     "node_modules",
     "bower_components",
+    "components",
     "test",
     "tests"
+  ],
+  "keywords": [
+    "web-components",
+    "polymer"
   ],
   "dependencies": {
     "polymer": "polymer/polymer#^1.6.0",
@@ -23,12 +28,12 @@
     "iron-resizable-behavior": "polymerelements/iron-resizable-behavior#^1.0.4",
     "iron-component-page": "polymerelements/iron-component-page#^1.1.7"
   },
-  "version": "0.1.0",
-  "_release": "0.1.0",
+  "version": "0.1.2",
+  "_release": "0.1.2",
   "_resolution": {
     "type": "version",
-    "tag": "0.1.0",
-    "commit": "d5d9e368db94c43d9747e215e4b71d67d404bd68"
+    "tag": "0.1.2",
+    "commit": "f44b366d054feb5d14e2b916d09232afa2c098e9"
   },
   "_source": "https://github.com/Juravenator/responsive-columns.git",
   "_target": "^0.1.0",

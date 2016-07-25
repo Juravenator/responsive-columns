@@ -22,7 +22,7 @@ This code may only be used under the MIT style license found at https://github.c
 `responsive-columns` displays its content in a column layout, or a series of
 animated pages, depending on the available size.
 
-Example:
+Simple example:
 
     <responsive-columns>
       <div>
@@ -35,9 +35,30 @@ Example:
         third column
       </div>
     </responsive-columns>
-    <responsive-columns responsive-width="400"
-                        column-mode="vertical"
-                        no-toolbar></responsive-columns>
+
+Custom toolbar example:
+
+    <responsive-columns no-toolbar
+                        selected-index="{{selectedIndex}}"
+                        min-selected="{{minSelected}}"
+                        max-selected="{{maxSelected}}">
+      <app-toolbar toolbar>
+        <paper-icon-button icon="arrow-back" previous-button disabled="[[minSelected]]"></paper-icon-button>
+        <span>column #[[selectedIndex]]</span>
+        <paper-icon-button icon="arrow-forward" next-button disabled="[[maxSelected]]"></paper-icon-button>
+      </app-toolbar>
+      <div>
+        <h1>first column</h1>
+        <img src="dino.jpg" alt=""/>
+      </div>
+      <div>
+        <h1>second column</h1>
+        <p>This is the second column</p>
+      </div>
+      <div>
+        <h1>third column</h1>
+      </div>
+    </responsive-columns>
 
 ### Styling
 The following custom properties and mixins are available for styling:
@@ -96,16 +117,26 @@ neon-animated-pages {
   display: block !important;
 }
 
+:host([responsive-mode="big"]) ::content [toolbar] {
+  display: none;
+}
+
+:host([max-selected][min-selected]) [next-button] {
+  display: none;
+}
+
+:host([max-selected][min-selected]) ::content [next-button] {
+  pointer-events: none;
+}
+
 </style>
 
+    <content select="[toolbar]"></content>
+
     <app-toolbar horizontal layout hide$="[[_toolbarMustHide(responsiveMode, noToolbar)]]">
-      <template is="dom-if" if="{{!_firstIsSelected(selectedIndex)}}" restamp="true">
-        <paper-icon-button icon="arrow-back" on-click="selectPrevious"></paper-icon-button>
-      </template>
+      <paper-icon-button disabled="[[minSelected]]" icon="arrow-back" on-click="selectPrevious"></paper-icon-button>
       <span flex></span>
-      <template is="dom-if" if="{{!_lastIsSelected(selectedIndex, _items)}}" restamp="true">
-        <paper-icon-button icon="arrow-forward" on-click="selectNext"></paper-icon-button>
-      </template>
+      <paper-icon-button disabled="[[maxSelected]]" icon="arrow-forward" on-click="selectNext"></paper-icon-button>
     </app-toolbar>
 
     <neon-animated-pages id="animatedPages"
@@ -115,7 +146,7 @@ neon-animated-pages {
                          items="{{_items}}"
                          vertical$="[[_columnIsVertical(columnMode)]]"
                          horizontal$="[[_columnIsHorizontal(columnMode)]]">
-      <content></content>
+      <content select=":not([toolbar])"></content>
     </neon-animated-pages>
 
   </template>
@@ -126,7 +157,7 @@ Polymer({
     is: "responsive-columns",
     properties: {
         /**
-     * The selected index when in small mode
+     * The selected column number, starts at 0
      */
         selectedIndex: {
             type: Number,
@@ -140,6 +171,24 @@ Polymer({
      */
         _items: {
             type: Array
+        },
+        /**
+     * true when the first column is selected
+     */
+        minSelected: {
+            type: Boolean,
+            computed: "_isMinSelected(selectedIndex)",
+            reflectToAttribute: !0,
+            notify: !0
+        },
+        /**
+     * true when the last column is selected
+     */
+        maxSelected: {
+            type: Boolean,
+            computed: "_isMaxSelected(selectedIndex, _items)",
+            reflectToAttribute: !0,
+            notify: !0
         },
         /**
      * animation used in 'small' mode. Changes programaticaly
@@ -188,45 +237,99 @@ Polymer({
     },
     behaviors: [ Polymer.IronResizableBehavior ],
     listeners: {
-        "iron-resize": "_sizeChanged"
+        "iron-resize": "_sizeChanged",
+        tap: "_tapHandler"
+    },
+    /**
+   * true when the first column is selected
+   *
+   * @param {Number} selectedIndex the column index
+   * @return {Boolean}
+   */
+    _isMinSelected: function(selectedIndex) {
+        return 0 == selectedIndex;
+    },
+    /**
+   * true when the last column is selected
+   * @param {Number} selectedIndex the column index
+   * @param {Array} _items the columns
+   * @return {Boolean}
+   */
+    _isMaxSelected: function(selectedIndex, _items) {
+        return this.selectedIndex == _items.length - 1;
     },
     /**
    * Responds to iron-resize event. Calculates responsiveMode.
+   * @param {Event} event the iron-resize event
    */
-    _sizeChanged: function(a) {
-        var b = Math.floor(this.offsetWidth);
-        b < this.responsiveWidth ? this._setResponsiveMode("small") : this._setResponsiveMode("big");
+    _sizeChanged: function(event) {
+        var x = Math.floor(this.offsetWidth);
+        x < this.responsiveWidth ? this._setResponsiveMode("small") : this._setResponsiveMode("big");
+    },
+    /**
+   * reponds to tap events, used to make [next-button] and [previous-button] work
+   * @param {Event} tap the tap event
+   */
+    _tapHandler: function(tap) {
+        var target = Polymer.dom(tap).localTarget;
+        target && (target.hasAttribute("next-button") && this.selectNext(), target.hasAttribute("previous-button") && this.selectPrevious());
     },
     /**
    * Returns true if responsiveMode is 'small'
+   * @return {Boolean}
+   * @param {String} responsiveMode the current responsiveMode
    */
-    _isSmall: function(a) {
-        return "small" == a;
+    _isSmall: function(responsiveMode) {
+        return "small" == responsiveMode;
     },
-    _toolbarMustHide: function(a, b) {
-        return b || !this._isSmall(a);
+    /**
+   * @return {Boolean}
+   * @param {String} responsiveMode the current responsiveMode
+   * @param {Boolean} noToolbar if the toolbar is force-hidden
+   */
+    _toolbarMustHide: function(responsiveMode, noToolbar) {
+        return noToolbar || !this._isSmall(responsiveMode);
     },
-    _firstIsSelected: function(a) {
-        return 0 == a;
+    /**
+   * @param {Number} index the current selectedIndex
+   * @param {Number} oldIndex the old selectedIndex
+   */
+    _selectedIndexChanged: function(index, oldIndex) {
+        "small" == this.responsiveMode ? index > oldIndex ? (this._set_entryAnimation("slide-from-right-animation"), 
+        this._set_exitAnimation("slide-left-animation")) : (this._set_entryAnimation("slide-from-left-animation"), 
+        this._set_exitAnimation("slide-right-animation")) : (this._set_entryAnimation(""), 
+        this._set_exitAnimation(""));
     },
-    _lastIsSelected: function(a, b) {
-        return this.selectedIndex == b.length - 1;
-    },
-    _selectedIndexChanged: function(a, b) {
-        a > b ? (this._set_entryAnimation("slide-from-right-animation"), this._set_exitAnimation("slide-left-animation")) : (this._set_entryAnimation("slide-from-left-animation"), 
-        this._set_exitAnimation("slide-right-animation"));
-    },
+    /**
+   * Decrements the selected index unless this value is already 0.
+   * This function still works when in big mode. The effect will, of course,
+   * only be seen when switching to small mode.
+   */
     selectPrevious: function() {
         this.selectedIndex > 0 && this.$.animatedPages.selectPrevious();
     },
+    /**
+   * Increments the selected index unless this value is already the maximum, in
+   * which case it will stay the same.
+   * This function still works when in big mode. The effect will, of course,
+   * only be seen when switching to small mode.
+   */
     selectNext: function() {
-        this.selectedIndex < this.$.animatedPages.items.length && this.$.animatedPages.selectNext();
+        this.selectedIndex < this.$.animatedPages.items.length - 1 && this.$.animatedPages.selectNext();
     },
-    _columnIsVertical: function(a) {
-        return "vertical" == a;
+    /**
+   * @return {Boolean}
+   * @param {String} columnMode the current column node
+   */
+    _columnIsVertical: function(columnMode) {
+        return "vertical" == columnMode;
     },
-    _columnIsHorizontal: function(a) {
-        return !this._columnIsVertical(a);
+    /**
+   * @return {Boolean}
+   * @param {String} columnMode the current column node
+   */
+    _columnIsHorizontal: function(columnMode) {
+        return !this._columnIsVertical(columnMode);
     }
 });
 </script>
