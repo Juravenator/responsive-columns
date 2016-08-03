@@ -75,6 +75,7 @@ Custom property | Description | Default
 :host {
   display: block;
   height: 100%;
+  position: relative;
 }
 
 [horizontal] {
@@ -96,6 +97,10 @@ Custom property | Description | Default
       flex: 1;
 }
 
+div[vertical][layout] {
+  height: 100%;
+}
+
 app-toolbar {
   background-color: var(--toolbar-color, #00796B);
 }
@@ -106,10 +111,6 @@ app-toolbar paper-icon-button {
 
 app-toolbar[hide] {
   display: none !important;
-}
-
-neon-animated-pages {
-  height: 100%;
 }
 
 :host([responsive-mode="big"]) #animatedPages ::content > * {
@@ -131,23 +132,26 @@ neon-animated-pages {
 
 </style>
 
-    <content select="[toolbar]"></content>
+    <div vertical layout>
+      <content select="[toolbar]"></content>
 
-    <app-toolbar horizontal layout hide$="[[_toolbarMustHide(responsiveMode, noToolbar)]]">
-      <paper-icon-button disabled="[[minSelected]]" icon="arrow-back" on-click="selectPrevious"></paper-icon-button>
-      <span flex></span>
-      <paper-icon-button disabled="[[maxSelected]]" icon="arrow-forward" on-click="selectNext"></paper-icon-button>
-    </app-toolbar>
+      <app-toolbar horizontal layout hide$="[[_toolbarMustHide(responsiveMode, noToolbar)]]">
+        <paper-icon-button disabled="[[minSelected]]" icon="arrow-back" on-click="selectPrevious"></paper-icon-button>
+        <span flex></span>
+        <paper-icon-button disabled="[[maxSelected]]" icon="arrow-forward" on-click="selectNext"></paper-icon-button>
+      </app-toolbar>
 
-    <neon-animated-pages id="animatedPages"
-                         selected="{{selectedIndex}}"
-                         entry-animation="[[_entryAnimation]]"
-                         exit-animation="[[_exitAnimation]]"
-                         items="{{_items}}"
-                         vertical$="[[_columnIsVertical(columnMode)]]"
-                         horizontal$="[[_columnIsHorizontal(columnMode)]]">
-      <content select=":not([toolbar])"></content>
-    </neon-animated-pages>
+      <neon-animated-pages id="animatedPages"
+                           selected="{{selectedIndex}}"
+                           entry-animation="[[_entryAnimation]]"
+                           exit-animation="[[_exitAnimation]]"
+                           items="{{_items}}"
+                           vertical$="[[_columnIsVertical(columnMode)]]"
+                           horizontal$="[[_columnIsHorizontal(columnMode)]]"
+                           flex>
+        <content select=":not([toolbar])"></content>
+      </neon-animated-pages>
+    </div>
 
   </template>
   <script>

@@ -73,23 +73,26 @@ Custom property | Description | Default
   <template>
     <link rel="stylesheet" type="text/css" href="../css/responsive-columns.css?__inline=true">
 
-    <content select="[toolbar]"></content>
+    <div vertical layout>
+      <content select="[toolbar]"></content>
 
-    <app-toolbar horizontal layout hide$="[[_toolbarMustHide(responsiveMode, noToolbar)]]">
-      <paper-icon-button disabled="[[minSelected]]" icon="arrow-back" on-click="selectPrevious"></paper-icon-button>
-      <span flex></span>
-      <paper-icon-button disabled="[[maxSelected]]" icon="arrow-forward" on-click="selectNext"></paper-icon-button>
-    </app-toolbar>
+      <app-toolbar horizontal layout hide$="[[_toolbarMustHide(responsiveMode, noToolbar)]]">
+        <paper-icon-button disabled="[[minSelected]]" icon="arrow-back" on-click="selectPrevious"></paper-icon-button>
+        <span flex></span>
+        <paper-icon-button disabled="[[maxSelected]]" icon="arrow-forward" on-click="selectNext"></paper-icon-button>
+      </app-toolbar>
 
-    <neon-animated-pages id="animatedPages"
-                         selected="{{selectedIndex}}"
-                         entry-animation="[[_entryAnimation]]"
-                         exit-animation="[[_exitAnimation]]"
-                         items="{{_items}}"
-                         vertical$="[[_columnIsVertical(columnMode)]]"
-                         horizontal$="[[_columnIsHorizontal(columnMode)]]">
-      <content select=":not([toolbar])"></content>
-    </neon-animated-pages>
+      <neon-animated-pages id="animatedPages"
+                           selected="{{selectedIndex}}"
+                           entry-animation="[[_entryAnimation]]"
+                           exit-animation="[[_exitAnimation]]"
+                           items="{{_items}}"
+                           vertical$="[[_columnIsVertical(columnMode)]]"
+                           horizontal$="[[_columnIsHorizontal(columnMode)]]"
+                           flex>
+        <content select=":not([toolbar])"></content>
+      </neon-animated-pages>
+    </div>
 
   </template>
   <script src="../javascript/responsive-columns.js?__inline=true"></script>

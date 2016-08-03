@@ -1,7 +1,9 @@
 :host {
   display: block;
   height: 100%;
+  position: relative;
 }
+
 [horizontal] {
   display: flex;
   flex-direction: row;
@@ -13,6 +15,10 @@
 [flex] {
   flex: 1;
 }
+div[vertical][layout] {
+  height: 100%;
+}
+
 app-toolbar {
   background-color: var(--toolbar-color, #00796B);
   paper-icon-button {
@@ -21,9 +27,6 @@ app-toolbar {
   &[hide] {
     display: none !important;
   }
-}
-neon-animated-pages {
-  height: 100%;
 }
 :host([responsive-mode="big"]) {
   #animatedPages {
