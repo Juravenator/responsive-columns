@@ -70,7 +70,8 @@ Polymer({
     responsiveMode: {
       type: String,
       readOnly: true,
-      reflectToAttribute: true
+      reflectToAttribute: true,
+      notify: true
     },
 
     /**
