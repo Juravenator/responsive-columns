@@ -5,7 +5,7 @@
     "Glenn Dirkx <glenn.dirkx@agilians.com>"
   ],
   "description": "A Polymer element that displays its content in a column layout, or a series of animated pages, depending on the available size.",
-  "main": "responsive-columns.scss",
+  "main": "responsive-columns.html",
   "license": "https://github.com/Juravenator/responsive-columns/blob/master/LICENSE",
   "ignore": [
     "**/.*",
