@@ -1,6 +1,6 @@
 {
   "name": "responsive-columns",
-  "version": "1.0.0",
+  "version": "0.1.4",
   "description": "A Polymer element that displays its content in a column layout, or a series of animated pages, depending on the available size.",
   "main": "gruntfile.js",
   "directories": {
