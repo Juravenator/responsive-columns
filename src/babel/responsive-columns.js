@@ -115,7 +115,11 @@ Polymer({
    * @return {Boolean}
    */
   _isMaxSelected: function(selectedIndex, _items) {
-    return this.selectedIndex == _items.length - 1;
+    if (_items.length == 0) {
+      return true;
+    } else {
+      return this.selectedIndex == _items.length - 1;
+    }
   },
 
   /**

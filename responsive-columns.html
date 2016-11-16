@@ -261,7 +261,7 @@ Polymer({
    * @return {Boolean}
    */
     _isMaxSelected: function(selectedIndex, _items) {
-        return this.selectedIndex == _items.length - 1;
+        return 0 == _items.length || this.selectedIndex == _items.length - 1;
     },
     /**
    * Responds to iron-resize event. Calculates responsiveMode.
