@@ -19,6 +19,15 @@
     "web-components",
     "polymer"
   ],
+  "ignore": [
+    "src",
+    "wct.conf.json",
+    "README.md",
+    "package.json",
+    "gruntfile.js",
+    ".travis.yml",
+    ".gitignore"
+  ],
   "dependencies": {
     "polymer": "polymer/polymer#^1.6.0",
     "neon-animation": "polymerelements/neon-animation#^1.2.4",
